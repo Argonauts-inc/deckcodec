@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test:
+    name: Go ${{ matrix.go }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        go: ["1.24.x"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Go ${{ matrix.go }}
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go }}
+          cache: true
+          cache-dependency-path: |
+            go.sum
+            **/go.sum
+
+      - name: Go env
+        run: |
+          go version
+          go env
+
+      - name: Verify go.mod is tidy
+        run: |
+          go mod tidy
+          git diff --exit-code -- go.mod go.sum
+
+      - name: Build all packages
+        run: go build ./...
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Test (race + coverage)
+        run: |
+          go test ./... -race -covermode=atomic -coverprofile=coverage.out
+          go tool cover -func=coverage.out | tail -n 1
+
+      - name: Run example (basic)
+        run: |
+          go run ./examples/basic/main.go
+          test -f tmp/manifest.json
+          test -f tmp/pack/1.json
+          ls -l tmp/manifest.json tmp/pack/1.json
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ matrix.go }}
+          path: coverage.out
+          if-no-files-found: error
+
+      - name: Upload generated example outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: example-artifacts-${{ matrix.go }}
+          path: |
+            tmp/manifest.json
+            tmp/pack/1.json
+          if-no-files-found: warn
