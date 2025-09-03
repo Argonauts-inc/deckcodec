@@ -28,7 +28,7 @@ go.work.sum
 .env
 
 .serena
-pack/
+tmp/
 
 # Editor/IDE
 # .idea/
