@@ -1,0 +1,28 @@
+# top-most EditorConfig file
+root = true
+
+# Default (fallback)
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+trim_trailing_whitespace = true
+
+# Go: use tabs (official Go style)
+[*.go]
+indent_style = tab
+indent_size = 4
+
+# YAML, JSON, Markdown, EditorConfig: 2 spaces
+[*.{yml,yaml,json,md,editorconfig}]
+indent_style = space
+indent_size = 2
+
+# GitHub Actions workflows
+[.github/workflows/*.yml]
+indent_style = space
+indent_size = 2
+
+# Makefiles must use tab
+[Makefile]
+indent_style = tab
