@@ -4,7 +4,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/Argonauts-inc/deckcodec)](https://goreportcard.com/report/github.com/Argonauts-inc/deckcodec)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A compact, efficient codec for encoding and decoding **Xross Stars** card game decks into URL-safe base64 strings.
+A compact, efficient codec for encoding and decoding [**Xross Stars**](https://xross-stars.com) card game decks into URL-safe base64 strings.
 
 ## Features
 
