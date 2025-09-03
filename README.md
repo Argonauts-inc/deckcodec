@@ -1,2 +1,2 @@
 # deckcodec
-A tiny codec for TCG decks
+A tiny codec for Xross Stars decks.
